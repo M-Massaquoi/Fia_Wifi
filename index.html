@@ -15,6 +15,9 @@
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css">
     
+    <!-- Animate.css for SweetAlert animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
     <style>
         :root {
             --primary-color: #0891b2;
@@ -292,6 +295,17 @@
             text-decoration: underline;
         }
         
+        .inline-terms-link {
+            color: var(--primary-color);
+            text-decoration: underline;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .inline-terms-link:hover {
+            color: #0e7490;
+        }
+        
         .footer-links {
             text-align: center;
             margin-top: 1.5rem;
@@ -309,6 +323,19 @@
         
         .footer-links a:hover {
             color: var(--primary-color);
+        }
+        
+        /* Footer Logo Section */
+        .footer-logo-section {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .footer-logo {
+            max-width: 140px;
+            height: auto;
         }
         
         .bottom-logo {
@@ -362,20 +389,122 @@
         }
         
         /* Loading Spinner */
+        .loader, .loader:before {
+            display: inline-block;
+            border: 3px double transparent;
+            border-top-color: #fff;
+            border-radius: 50%;
+            box-sizing: border-box;
+            width: 24px;
+            height: 24px;
+        }
+        
+        .loader {
+            animation: wifiLoading 1s ease-in-out infinite;
+        }
+        
+        .loader:before {
+            content: '';
+            width: 0;
+            height: 0;
+        }
+        
+        @keyframes wifiLoading {
+            0% { 
+                border-style: none;
+                transform: rotate(0deg);
+            }
+            50% {
+                border-style: double;
+            }
+            100% { 
+                border-style: double;
+                transform: rotate(360deg);
+            }
+        }
+        
         .btn-primary .spinner-border {
             width: 1.2rem;
             height: 1.2rem;
             border-width: 2px;
         }
         
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+        }
+        
+        .btn-loading .btn-text {
+            opacity: 0;
+        }
+        
+        .btn-loading .spinner-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: white;
+            font-weight: 600;
+        }
+        
         /* SweetAlert2 Custom Styling */
         .swal2-popup {
-            border-radius: 20px;
-            padding: 2rem;
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
         }
         
         .swal2-icon {
-            margin: 2rem auto 1rem;
+            margin: 2.5rem auto 1.5rem;
+            border-width: 5px;
+            width: 80px;
+            height: 80px;
+        }
+        
+        .swal2-icon.swal2-success {
+            border-color: #10b981;
+        }
+        
+        .swal2-success-ring {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .swal2-success-line-tip,
+        .swal2-success-line-long {
+            background-color: #10b981;
+        }
+        
+        .swal2-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .swal2-html-container {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .swal2-confirm {
+            font-size: 1.1rem;
+            padding: 0.875rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .swal2-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(8, 145, 178, 0.4);
+        }
+        
+        .swal2-timer-progress-bar {
+            background: rgba(8, 145, 178, 0.8);
         }
         
         .error-message {
@@ -457,8 +586,8 @@
         <div class="login-card">
             <!-- Logo Section -->
             <div class="logo-section">
-                <h1>Stay Connected at FNA</h1>
-                <p class="subtitle">Just a few steps to get online "</p>
+                <h3>Freetown International Airport</h3>
+                <p class="subtitle">Scan your passport at the kiosk to receive an access code</p>
             </div>
 
             <!-- Error Message -->
@@ -470,7 +599,7 @@
             <form id="loginForm" method="POST" action="/login">
                 <!-- Passport ID Field -->
                 <div class="mb-3">
-                    <label for="passportId" class="form-label">Your Passport ID</label>
+                    <label for="passportId" class="form-label">Passport Number</label>
                     <div class="input-wrapper">
                         <i class="bi bi-credit-card input-icon"></i>
                         <input 
@@ -481,28 +610,31 @@
                             placeholder="e.g. P1234567" 
                             autocomplete="off"
                             required
-                            aria-label="Passport ID"
+                            aria-label="Passport Number"
                         >
                     </div>
+                    <div class="helper-text">Enter your passport number as shown on your passport</div>
                 </div>
 
                 <!-- Access Code Field -->
                 <div class="mb-3">
-                    <label for="accessCode" class="form-label">Access Code </label>
+                    <label for="accessCode" class="form-label">OTP Access Code</label>
                     <div class="input-wrapper">
                         <i class="bi bi-key input-icon"></i>
                         <input 
-                            type="password" 
+                            type="text" 
                             class="form-control" 
                             id="accessCode" 
                             name="password"
-                            placeholder="••••••••" 
+                            placeholder="Enter 4-digit code" 
                             autocomplete="off"
                             required
-                            aria-label="Access Code"
+                            maxlength="4"
+                            pattern="[0-9]{4}"
+                            aria-label="OTP Access Code"
                         >
                     </div>
-                    <div class="helper-text">Enter the Credentials from Swiped Passport</div>
+                    <div class="helper-text">Enter the 4-digit code from the kiosk after scanning your passport</div>
                 </div>
 
                 <!-- Hidden FortiGate Fields -->
@@ -518,34 +650,41 @@
                         required
                     >
                     <label class="form-check-label" for="agreeTerms">
-                        I agree with the user agreement.
+                        <a href="#" onclick="showTermsModal(); return false;" class="inline-terms-link">I agree with the user agreement.</a>
                     </label>
                 </div>
                 
-                <div class="terms-link">
+
+                <!-- Hidden FortiGate Fields
+                    <div class="terms-link">
                     <a href="#" onclick="showTermsModal(); return false;">
                         Click here to access the Clarification Text, Privacy Agreement and Cookie Policy.
                     </a>
                 </div>
+                -->
 
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
-                    Access WiFi
-                    <i class="bi bi-wifi"></i>
+                    <span class="btn-text">
+                        Submit
+                        <i class="bi bi-wifi"></i>
+                    </span>
+                    <span class="spinner-wrapper" style="display: none;">
+                        <span class="loader"></span>
+                        Authenticating...
+                    </span>
                 </button>
             </form>
 
-            <!-- Footer Links -->
-            <div class="footer-links">
-                <span style="color: #e2e8f0;">•</span>
-                <a href="https://freetown-airport.aero/contact-us/" onclick="return false;">Contact Us</a>
-                <a href="https://v0-fiafeedback.vercel.app/" onclick="return false;">Feedback</a>
+            <!-- Footer with FIA Logo -->
+            <div class="footer-logo-section">
+                <img src="images/Logo.png" alt="Freetown International Airport" class="footer-logo">
             </div>
 
             <!-- FNA Logo at Bottom -->
-            <div class="bottom-logo">
+            <!-- <div class="bottom-logo">
                 <img src="images/logo.jpeg" alt="Freetown International Airport Logo" class="airport-logo">
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -579,6 +718,27 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
     
     <script>
+        // ============================================
+        // TESTING MODE - Remove in production!
+        // ============================================
+        const TESTING_MODE = true; // Set to false for production
+        
+        // Test credentials matching your OTP system format
+        const TEST_CREDENTIALS = [
+            { passportId: 'P1234567', accessCode: '1234' },
+            { passportId: 'P7654321', accessCode: '6543' },
+            { passportId: 'A9876543', accessCode: '9876' },
+            { passportId: 'B5555555', accessCode: '5555' }
+        ];
+        
+        function validateTestCredentials(passportId, accessCode) {
+            return TEST_CREDENTIALS.some(cred => 
+                cred.passportId.toUpperCase() === passportId.toUpperCase() && 
+                cred.accessCode === accessCode
+            );
+        }
+        // ============================================
+        
         // Initialize toasts
         const successToast = new bootstrap.Toast(document.getElementById('successToast'), {
             autohide: true,
@@ -645,7 +805,9 @@
                 width: '600px',
                 confirmButtonText: 'I Understand',
                 confirmButtonColor: '#0891b2',
-                showCloseButton: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showCloseButton: false,
                 customClass: {
                     popup: 'terms-modal'
                 }
@@ -654,32 +816,50 @@
                     agreeCheckbox.checked = true;
                     submitBtn.disabled = false;
                     submitBtn.style.cursor = 'pointer';
+                    
+                    // Show success toast
+                    showSuccessToast('Terms accepted! You can now proceed with login.');
                 }
             });
         }
         
         // Check URL parameters for authentication status
         window.addEventListener('DOMContentLoaded', function() {
+            // Do nothing on initial page load
+            // Success/error notifications will only show after form submission
+            // when FortiGate redirects back with parameters
+            
             const urlParams = new URLSearchParams(window.location.search);
             const authStatus = urlParams.get('auth');
             const errorCode = urlParams.get('error');
+            const successParam = urlParams.get('success');
             
-            // Handle authentication success
-            if (authStatus === 'success' || urlParams.get('success') === '1') {
-                showSuccessAlert();
-            }
+            // Only check if we have a form submission flag in sessionStorage
+            const formSubmitted = sessionStorage.getItem('formSubmitted');
             
-            // Handle authentication failure
-            if (errorCode === '1' || authStatus === 'failed') {
-                showErrorToast('Invalid access code. Please check your credentials.');
+            if (formSubmitted === 'true') {
+                // Clear the flag
+                sessionStorage.removeItem('formSubmitted');
+                
+                // Handle authentication success
+                if ((authStatus && authStatus === 'success') || (successParam && successParam === '1')) {
+                    showSuccessAlert();
+                }
+                
+                // Handle authentication failure
+                if ((errorCode && errorCode === '1') || (authStatus && authStatus === 'failed')) {
+                    showErrorToast('Invalid credentials. Please check your Passport ID and Access Code.');
+                }
             }
         });
         
         // Form validation and submission handling
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            const passportId = document.getElementById('passportId').value.trim();
+            const passportId = document.getElementById('passportId').value.trim().toUpperCase();
             const accessCode = document.getElementById('accessCode').value.trim();
-            const submitBtn = this.querySelector('button[type="submit"]');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const spinnerWrapper = submitBtn.querySelector('.spinner-wrapper');
             
             // Basic client-side validation
             if (!passportId || !accessCode) {
@@ -688,23 +868,107 @@
                 return false;
             }
             
+            // Validate OTP format (4 digits)
+            if (!/^\d{4}$/.test(accessCode)) {
+                e.preventDefault();
+                showErrorToast('OTP must be a 4-digit number.');
+                return false;
+            }
+            
             // Show loading state
+            submitBtn.classList.add('btn-loading');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `
-                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Authenticating...
-            `;
+            btnText.style.opacity = '0';
+            spinnerWrapper.style.display = 'flex';
             
-            // Show processing toast
-            showInfoToast('Verifying your credentials...');
+            // ============================================
+            // TESTING MODE - Simulate authentication
+            // ============================================
+            if (TESTING_MODE) {
+                e.preventDefault(); // Prevent actual form submission
+                
+                // Simulate network delay
+                setTimeout(function() {
+                    const isValid = validateTestCredentials(passportId, accessCode);
+                    
+                    // Reset button state
+                    submitBtn.classList.remove('btn-loading');
+                    btnText.style.opacity = '1';
+                    spinnerWrapper.style.display = 'none';
+                    
+                    if (isValid) {
+                        // Success - show success toast and alert
+                        showSuccessAlert();
+                    } else {
+                        // Failed - show error toast
+                        showErrorToast('Invalid passport number or OTP code. Please try again.');
+                        // Re-enable button when user starts typing again
+                        const passportInput = document.getElementById('passportId');
+                        const accessInput = document.getElementById('accessCode');
+                        const agreeCheckbox = document.getElementById('agreeTerms');
+                        
+                        function enableButtonOnInput() {
+                            if (agreeCheckbox.checked) {
+                                submitBtn.disabled = false;
+                                submitBtn.style.cursor = 'pointer';
+                            }
+                        }
+                        
+                        passportInput.addEventListener('input', enableButtonOnInput, { once: true });
+                        accessInput.addEventListener('input', enableButtonOnInput, { once: true });
+                    }
+                }, 2000); // 2 second delay to simulate authentication
+                
+                return false;
+            }
+            // ============================================
             
-            // Form will submit to FortiGate
+            // Set flag in sessionStorage to indicate form was submitted
+            sessionStorage.setItem('formSubmitted', 'true');
+            
+            // Form will submit to FortiGate in production
             // FortiGate + RADIUS handles authentication
-            // Note: In production, FortiGate will redirect based on auth result
         });
         
-        // Success Alert with SweetAlert2
+        // Success Alert with SweetAlert2 (with toast)
         function showSuccessAlert() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Connected!',
+                html: `
+                    <p style="font-size: 1.1rem; color: #64748b; margin-top: 1rem; font-weight: 500;">
+                        Welcome to FNA WiFi<br>
+                        <span style="color: #0891b2; font-weight: 600;">Enjoy your stay! ✈️</span>
+                    </p>
+                `,
+                confirmButtonText: 'Start Browsing',
+                confirmButtonColor: '#0891b2',
+                width: '450px',
+                timer: 5000,
+                timerProgressBar: true,
+                backdrop: `rgba(15, 23, 42, 0.5)`,
+                showClass: {
+                    popup: 'animate__animated animate__zoomIn animate__faster'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__zoomOut animate__faster'
+                }
+            }).then((result) => {
+                // Show success toast as well
+                showSuccessToast('Successfully connected to FNA WiFi!');
+                
+                // Redirect to original destination or default page
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirect = urlParams.get('redirect') || 'https://www.google.com';
+                
+                setTimeout(() => {
+                    window.location.href = redirect;
+                }, 1500);
+            });
+        }
+        
+        // Success Alert without toast (for page load)
+        function showSuccessAlertOnly() {
             Swal.fire({
                 icon: 'success',
                 title: 'Welcome to FNA WiFi!',
@@ -738,13 +1002,15 @@
             errorToast.show();
             
             // Reset form button
-            const submitBtn = document.querySelector('button[type="submit"]');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const spinnerWrapper = submitBtn.querySelector('.spinner-wrapper');
+            
             if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = `
-                    Access WiFi
-                    <i class="bi bi-wifi"></i>
-                `;
+                submitBtn.classList.remove('btn-loading');
+                submitBtn.disabled = true; // Keep disabled until checkbox is checked
+                btnText.style.opacity = '1';
+                spinnerWrapper.style.display = 'none';
             }
         }
         
@@ -754,11 +1020,10 @@
             successToast.show();
         }
         
-        // Info Toast (for processing)
+        // Info Toast (for processing) - uses a neutral color
         function showInfoToast(message) {
-            // Reuse success toast with different message
-            document.getElementById('successMessage').textContent = message;
-            successToast.show();
+            // Don't show any toast during verification
+            // The spinner on the button is enough feedback
         }
         
         // Clear error on input
